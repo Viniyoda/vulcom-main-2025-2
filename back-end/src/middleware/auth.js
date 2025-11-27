@@ -16,6 +16,17 @@ const bypassRoutes = [
   // { url: '/users', method: 'POST' }  
 ]
 
+/*
+---
+Vulnerabilidade:API2:2023 – Falha de autenticação
+---
+A vulnerabilidade de falha de autenticação foi resolvida com um sistema que faz 
+uma validação do token JWT (cookie ou do cabeçalho)
+Um middleware faz uma verificaçao se o token e válido e não está expirado 
+utilizando o jwt.verify.
+Se o token for correto, as informações do usuário são salvas em req.authUser.
+*/
+
 // Função do middleware
 export default function(req, res, next) {
   /*

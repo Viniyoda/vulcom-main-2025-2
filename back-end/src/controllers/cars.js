@@ -37,6 +37,20 @@ controller.create = async function(req, res) {
   }
 }
 
+/*
+---
+Vulnerabilidade:API3:2023 – Falha de autenticação a nível de propriedade 
+---
+Atribuição em massa. A vulnerabilidade foi evitada utilizando 2 
+medidas principais no código.
+a validação segura que o esquema de validação do (carSchema) foi configurado
+pra não aceitar que os campos sensiveis tipo "created_user_id" ou o "updater_user_id" 
+fossem recebidos direto do cliente.
+E usando atribuição controlada do servidor, que o servidor assume a resposabilidade 
+do preenchimento dos campos críticos internos no código, usndo informações confiaveis
+como o ID do usuario ja autenticado
+*/
+
 controller.retrieveAll = async function(req, res) {
   try {
 
@@ -124,6 +138,20 @@ controller.update = async function(req, res) {
     res.status(500).end()
   }
 }
+
+/*
+---
+Vulnerabilidade:API1:2023 – Falha de autenticação a nível de objeto
+ele afeta: retrieveOne, update, delete
+---
+O sistema não faz a verificação do usuario que esta autenticado é mesmo o dono
+do carro que ele ta tentando ver na tela, atualizar ou entao deletar.
+quer dizer que qualquer user que ta logado pode ir modificando ou entrando e olhando
+os dados dos outros.
+Uma boa solução seria fazer uma busca de get do registro no banco pra verificar
+se o created_user_id do carro é igual o id do user q ta logado e autenticado
+se der erro na verificação retorna um erro de HTTP 403: Forbidden no programa
+*/
 
 controller.delete = async function(req, res) {
   try {
